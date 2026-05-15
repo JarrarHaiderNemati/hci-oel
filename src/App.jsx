@@ -921,7 +921,7 @@ function CartScreen({ cart, onPlaceOrder, onRemoveItem, onUpdateQuantity, setVie
 function OrdersScreen({ onReorder, orders, setSelectedOrder, setView }) {
   return (
     <>
-      <Header />
+      <Header onProfile={() => setView('profile')} />
       <main className="screen orders-screen">
         <h1>Order History</h1>
         {!orders.length && (
@@ -965,14 +965,14 @@ function OrdersScreen({ onReorder, orders, setSelectedOrder, setView }) {
   )
 }
 
-function ProfileScreen({ onLogout, onSaveProfile, user }) {
+function ProfileScreen({ onLogout, onSaveProfile, setView, user }) {
   const [name, setName] = useState(user.name)
   const [preferences, setPreferences] = useState(user.preferences || [])
   const [draftPreference, setDraftPreference] = useState('')
 
   return (
     <>
-      <Header />
+      <Header onProfile={() => setView('profile')} />
       <main className="screen profile-screen">
         <section className="profile-card">
           <img src={user.avatar || assets.profile} alt="" />
@@ -1034,7 +1034,7 @@ function ProfileScreen({ onLogout, onSaveProfile, user }) {
           </button>
         </section>
 
-        <button className="settings-row" onClick={onLogout} type="button">
+        <button className="logout-button" onClick={onLogout} type="button">
           <span>Log out</span>
           <Icon name="logout" />
         </button>
@@ -1046,7 +1046,7 @@ function ProfileScreen({ onLogout, onSaveProfile, user }) {
 function StatusScreen({ order, setView }) {
   return (
     <>
-      <Header onBack={() => setView('orders')} />
+      <Header onBack={() => setView('orders')} onProfile={() => setView('profile')} />
       <main className="screen status-screen">
         <section className="status-card">
           <span className="status-icon">
@@ -1092,7 +1092,11 @@ function ReceiptScreen({ order, setView }) {
 
   return (
     <>
-      <Header onBack={() => setView('status')} title="Receipt" />
+      <Header
+        onBack={() => setView('status')}
+        onProfile={() => setView('profile')}
+        title="Receipt"
+      />
       <main className="screen receipt-screen">
         <section className="receipt-card">
           <span className="status-icon">
@@ -1370,6 +1374,7 @@ function App() {
       <ProfileScreen
         onLogout={handleLogout}
         onSaveProfile={handleSaveProfile}
+        setView={setView}
         user={user}
       />
     )
